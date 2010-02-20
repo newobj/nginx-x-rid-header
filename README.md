@@ -3,6 +3,8 @@ OVERVIEW
 
 nginx-x-rid-header is a small module which adds a request-scoped id (uuid) variable that can be used to correlate frontend logging/activity with backend logging/activity.
 
+Currently only supports NGX_LINUX and NGX_DARWIN.
+
 CREDITS
 ======
 
@@ -11,7 +13,7 @@ Brian Long (<mailto:newobj@gmail.com>, <mailto:brian@dotspots.com>, <http://newo
 USAGE
 =====
 
-1) Add `--add-module=../git/nginx-x-rid-header` to your nginx configure command. `make` and `make install`.
+1) Add `--add-module=../git/nginx-x-rid-header` to your nginx configure command. On Linux, you should also add `--with-ld-opt=-lossp-uuid` or whatever flavor of uuid-devel comes with your distribution. Now `make` and `make install`.
 
 2) At the http {} level of you config file, add the argument-less directive `request_id_header;`
 

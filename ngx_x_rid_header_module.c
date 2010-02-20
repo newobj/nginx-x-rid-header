@@ -21,7 +21,7 @@
 ngx_int_t ngx_x_rid_header_get_variable(ngx_http_request_t *r, ngx_http_variable_value_t *v, uintptr_t data) {
   u_char *p;     
 
-  p = ngx_pnalloc(r->pool, 36);
+  p = ngx_pnalloc(r->pool, 37);
   if (p == NULL) {
       return NGX_ERROR;
   }       
@@ -29,17 +29,20 @@ ngx_int_t ngx_x_rid_header_get_variable(ngx_http_request_t *r, ngx_http_variable
 #if (NGX_FREEBSD)
 #error FreeBSD is not supported yet, sorry.
 #elif (NGX_LINUX)
-  uuid_t uuid;
+  uuid_t* uuid;
   if ( uuid_create(&uuid) ) {
-    return NGX_ERROR;
+    return -1;
   }
   if ( uuid_make(uuid, UUID_MAKE_V4) ) {
-    return NGX_ERROR;
-  }                                        
-  size_t data_len = 0;
-  if ( uuid_export(uuid, UUID_FMT_TXT, p, &data_len) ) {
-    return NGX_ERROR;
+    uuid_destroy(uuid);
+    return -1;
   }
+  size_t data_len = 37;
+  if ( uuid_export(uuid, UUID_FMT_STR, &p, &data_len) ) {
+    uuid_destroy(uuid);
+    return -1;
+  }
+  uuid_destroy(uuid);
 #elif (NGX_SOLARIS)
 #error Solaris is not supported yet, sorry.
 #elif (NGX_DARWIN)
@@ -111,4 +114,4 @@ ngx_module_t  ngx_x_rid_header_module = {
   NULL,                              /* exit master */              
   NGX_MODULE_V1_PADDING   
 };
-               
+
