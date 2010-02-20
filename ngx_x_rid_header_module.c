@@ -16,7 +16,6 @@
 // TODO:
 //
 // * make the name of the variable configurable
-// * is there a more portable way of getting uuid in here?
 
 ngx_int_t ngx_x_rid_header_get_variable(ngx_http_request_t *r, ngx_http_variable_value_t *v, uintptr_t data) {
   u_char *p;     
@@ -86,17 +85,7 @@ static ngx_http_module_t  ngx_x_rid_header_module_ctx = {
   NULL         /* merge location configuration */
 };                        
 
-char* ngx_x_rid_header_conf(ngx_conf_t* cf, ngx_command_t* cmd, void* conf) {                                                                          
-  return NGX_CONF_OK;
-}
-
 static ngx_command_t  ngx_x_rid_header_module_commands[] = {
-  { ngx_string("request_id_header"),
-    NGX_HTTP_MAIN_CONF|NGX_CONF_NOARGS,
-    ngx_x_rid_header_conf,
-    NGX_HTTP_MAIN_CONF_OFFSET,
-    0,
-    NULL },
   ngx_null_command
 };
                       

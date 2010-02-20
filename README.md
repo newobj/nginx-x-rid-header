@@ -15,9 +15,7 @@ USAGE
 
 1) Add `--add-module=../git/nginx-x-rid-header` to your nginx configure command. On Linux, you should also add `--with-ld-opt=-lossp-uuid` or whatever flavor of uuid-devel comes with your distribution. Now `make` and `make install`.
 
-2) At the http {} level of you config file, add the argument-less directive `request_id_header;`
-
-3) You now have access to a `$request_id` variable. Suggested use:
+2) You now have access to a `$request_id` variable. Suggested use:
 
     log_format main  '$remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent" "$http_x_forwarded_for" - $connection $request_time $upstream_cache_status $request_id';
     server {
@@ -29,4 +27,4 @@ USAGE
         }
     }
 
-4) On your backend (8080), you can pull the request header `x-exampledotcom-rid`, and log it or tie it to whatever you may like. This makes it really easy to correlate backend exceptions or instrumentation with frontend http request logs.
+3) On your backend (8080), you can pull the request header `x-exampledotcom-rid`, and log it or tie it to whatever you may like. This makes it really easy to correlate backend exceptions or instrumentation with frontend http request logs.
