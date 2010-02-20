@@ -2,7 +2,16 @@
 #include <ngx_http.h>
 #include <nginx.h>
 #include <ngx_http_variables.h>
+
+#if (NGX_FREEBSD)
+#error FreeBSD is not supported yet, sorry.
+#elif (NGX_LINUX)
+#include <uuid.h>      
+#elif (NGX_SOLARIS)
+#error Solaris is not supported yet, sorry.
+#elif (NGX_DARWIN)
 #include <uuid/uuid.h>      
+#endif
 
 // TODO:
 //
@@ -16,10 +25,28 @@ ngx_int_t ngx_x_rid_header_get_variable(ngx_http_request_t *r, ngx_http_variable
   if (p == NULL) {
       return NGX_ERROR;
   }       
-                
+      
+#if (NGX_FREEBSD)
+#error FreeBSD is not supported yet, sorry.
+#elif (NGX_LINUX)
+  uuid_t uuid;
+  if ( uuid_create(&uuid) ) {
+    return NGX_ERROR;
+  }
+  if ( uuid_make(uuid, UUID_MAKE_V4) ) {
+    return NGX_ERROR;
+  }                                        
+  size_t data_len = 0;
+  if ( uuid_export(uuid, UUID_FMT_TXT, p, &data_len) ) {
+    return NGX_ERROR;
+  }
+#elif (NGX_SOLARIS)
+#error Solaris is not supported yet, sorry.
+#elif (NGX_DARWIN)
   uuid_t uuid;
   uuid_generate(uuid);       
   uuid_unparse_lower(uuid, (char*)p);
+#endif
 
   v->len = 36;
   v->valid = 1;
