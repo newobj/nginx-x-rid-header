@@ -26,16 +26,23 @@ ngx_int_t ngx_x_rid_header_get_variable(ngx_http_request_t *r, ngx_http_variable
   }       
       
 #if (NGX_FREEBSD)
+  char *p_tmp;
   uuid_t uuid;
   uint32_t uuid_status;
   uuid_create(&uuid, &uuid_status);
   if ( uuid_status != uuid_s_ok ) {
     return -1;
   }
-  uuid_to_string(&uuid, (char **)&p, &uuid_status);
+  uuid_to_string(&uuid, (char **)&p_tmp, &uuid_status);
   if ( uuid_status != uuid_s_ok ) {
     return -1;
   }
+
+  if ( memmove(p, p_tmp, 36) < 0 ) {
+    free(p_tmp);
+    return -1;
+  }
+  free(p_tmp);
 #elif (NGX_LINUX)
   uuid_t* uuid;
   if ( uuid_create(&uuid) ) {
