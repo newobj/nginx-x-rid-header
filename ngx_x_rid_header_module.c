@@ -38,7 +38,7 @@ ngx_int_t ngx_x_rid_header_get_variable(ngx_http_request_t *r, ngx_http_variable
     return -1;
   }
 
-  if ( memmove(p, p_tmp, 36) < 0 ) {
+  if ( memmove(p, p_tmp, 37) < 0 ) {
     free(p_tmp);
     return -1;
   }
