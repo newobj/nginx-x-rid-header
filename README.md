@@ -1,3 +1,8 @@
+THIS MODULE IS DEPRECATED
+=========================
+
+Nginx now natively supports a `$request_id` variable. there is no need for this module anymore.
+
 OVERVIEW
 =======
 
