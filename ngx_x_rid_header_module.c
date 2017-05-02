@@ -4,7 +4,7 @@
 #include <ngx_http_variables.h>
 
 #if (NGX_FREEBSD)
-#error FreeBSD is not supported yet, sorry.
+#include <uuid.h>
 #elif (NGX_LINUX)
 #include <uuid.h>      
 #elif (NGX_SOLARIS)
@@ -26,7 +26,29 @@ ngx_int_t ngx_x_rid_header_get_variable(ngx_http_request_t *r, ngx_http_variable
   }       
       
 #if (NGX_FREEBSD)
-#error FreeBSD is not supported yet, sorry.
+
+  uuid_t uuid;
+  uint32_t status = uuid_s_ok;
+  char *str = NULL;
+
+  uuid_create(&uuid, &status);
+  if (status == uuid_s_ok) {
+
+    uuid_to_string(&uuid, &str, &status);
+    if (status == uuid_s_ok) {
+        strlcpy((char*)p, str, 37);
+    }
+    else {
+      return NGX_ERROR;
+    }
+    if (str)
+        free(str);
+
+  }
+  else {
+    return NGX_ERROR;
+  }
+
 #elif (NGX_LINUX)
   uuid_t* uuid;
   if ( uuid_create(&uuid) ) {
